@@ -59,6 +59,10 @@ async function run() {
 
         const recruitersCollection = client.db("test").collection("recruiters");
 
+        const jobCategoriesCollection = client.db("test").collection("jobCategories");
+
+        const learningsCollection = client.db("test").collection("learnings");
+
 
         // const verifyAdmin = async (req, res, next) => {
         //     const email = req.decoded.email;
@@ -103,7 +107,6 @@ async function run() {
                 res.status(404).send({ message: error.message })
             }
         })
-        // Get all Jobs Post
         app.get('/allJobs', async (req, res) => {
             try {
                 const Result = await allJobCollection.find().toArray();
@@ -112,7 +115,6 @@ async function run() {
                 res.status(404).send({ message: error.message })
             }
         })
-        // Get a Jobs Post
         app.get('/allJobs/:id', async (req, res) => {
             try {
                 const id = req.params.id;
@@ -123,7 +125,6 @@ async function run() {
                 res.status(404).send({ message: error.message })
             }
         })
-        // Delete A Job Post
         app.delete('/allJobs/:id', async (req, res) => {
             try {
                 const id = req.params.id;
@@ -261,6 +262,84 @@ async function run() {
             }
         })
 
+        // job Categories
+        app.post('/jobCategories', async (req, res) => {
+            try {
+                const newJobCategory = req.body;
+                const Category = await jobCategoriesCollection.insertMany(newJobCategory);
+                res.status(200).send(Category)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
+        app.get('/jobCategories', async (req, res) => {
+            try {
+                const jobCategories = await jobCategoriesCollection.find().toArray()
+                res.status(200).send(jobCategories)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
+        app.get('/jobCategories/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) }
+                const jobCategories = await jobCategoriesCollection.findOne(query)
+                res.status(200).send(jobCategories)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
+        app.delete('/jobCategories/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) }
+                const deletedJobCategory = await jobCategoriesCollection.deleteOne(query)
+                res.status(200).send(deletedJobCategory)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
+
+
+        // job Categories
+        app.post('/learnings', async (req, res) => {
+            try {
+                const newJobCategory = req.body;
+                const Category = await jobCategoriesCollection.insertMany(newJobCategory);
+                res.status(200).send(Category)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
+        app.get('/learnings', async (req, res) => {
+            try {
+                const learningsDetails = await learningsCollection.find().toArray()
+                res.status(200).send(learningsDetails)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
+        app.get('/learnings/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) }
+                const specificLearning = await learningsCollection.findOne(query)
+                res.status(200).send(specificLearning)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
+        app.delete('/learnings/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) }
+                const deletedLearningPost = await learningsCollection.deleteOne(query)
+                res.status(200).send(deletedLearningPost)
+            } catch (error) {
+                res.status(404).send({ message: error.message })
+            }
+        })
 
     } finally {
         // Ensures that the client will close when you finish/error
